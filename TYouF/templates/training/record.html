@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <title>Save audio data</title>
+    </head>
+    <body>
+        <button id="start">Start</button>
+        <button id="stop">Stop</button>
+        <button id="send">Send</button>
+        <script>
+            const startButton = document.getElementById('start');
+            const stopButton = document.getElementById('stop');
+            const sendButton = document.getElementById('send');
+
+            let mediaRecorder; // MediaRecorderオブジェクトをグローバルに定義
+
+            let blob = null;
+
+            // 録音開始の関数
+            function startRecording() {
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(function(stream) {
+                        chunks = [];
+                        mediaRecorder = new MediaRecorder(stream, {
+                            // mimeType: 'audio/wav'
+                            mimeType: 'audio/webm'
+                        });
+
+                        mediaRecorder.ondataavailable = function(e) {
+                            chunks.push(e.data);
+                        };
+
+                        mediaRecorder.onstop = function(e) {
+                            blob = new Blob(chunks, { 'type' : 'audio/webm' });
+                            
+                            const audioURL = window.URL.createObjectURL(blob);
+                            const audioElement = new Audio(audioURL);
+                            audioElement.controls = true;
+                            document.body.appendChild(audioElement);
+                        };
+
+                        mediaRecorder.start();
+                        // 録音が開始したことをユーザーに通知するなどのコードをここに記述する
+                        console.log("start")
+                    })
+                    .catch(function(err) {
+                        // エラーハンドリング
+                        console.log(err)
+                    });
+            }
+
+            // 録音停止の関数
+            function stopRecording() {
+                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                    mediaRecorder.stop();
+                    // 録音が停止したことをユーザーに通知するなどのコードをここに記述する
+                    console.log("stop")
+                }
+            }
+
+            function sendRecording(){
+                const formData = new FormData();
+                formData.append('audio', blob, 'recording.webm');
+
+                // サーバーにデータを送信するコードをここに記述する
+                fetch('upload_recording/', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    console.log(response)
+                })
+                .catch(error => {
+                    // エラーハンドリング
+                });
+            }
+
+            // start button
+            startButton.addEventListener('click', function () {
+                startRecording()
+            });
+            
+            // stop button
+            stopButton.addEventListener('click', function () {
+                stopRecording()
+            });
+            
+            // send button
+            sendButton.addEventListener('click', function () {
+                sendRecording()
+            });
+        </script>
+    </body>
+</html>
