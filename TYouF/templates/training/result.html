@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+    <link rel="stylesheet" href="record.css">
+    </head>
+<body>
+   <font color="blue" > <span id="view_time"></font></span>
+
+
+<script type="text/javascript">
+document.getElementById("view_time").innerHTML = getNow();
+
+function getNow() {
+	var now = new Date();
+	var year = now.getFullYear();
+	var mon = now.getMonth()+1; //１を足すこと
+	var day = now.getDate();
+	var hour = now.getHours();
+	var min = now.getMinutes();
+	var sec = now.getSeconds();
+
+	//出力用
+	var s = year + "年" + mon + "月" + day + "日" + hour + "時" + min + "分" + sec + "秒"; 
+	return s;
+}
+</script>
+<ul>
+  <li>流暢さ</li>
+  <li>語彙</li>
+  <li>未定</li>
+   <li>未定</li>
+</ul>
+<p>前回のスコア<br>
+    日付<br>
+    一ヶ月の平均点</p>
+    <p>
+            <img src="eigo.png">
+        </p>
+
+</body>
+</html>

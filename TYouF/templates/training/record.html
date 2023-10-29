@@ -4,9 +4,62 @@
         <title>Save audio data</title>
     </head>
     <body>
-        <button id="start">Start</button>
+        <center>
+        <!--
+        <h1>＜練習＞</h1>
+        -->
+        <h3>シチュエーション</h3>
+        <p>
+	        <input type="radio" name="num_of_sit" value="1">
+	        <label>具体的な製品説明</label>
+	        <input type="radio" name="num_of_sit" value="2">
+	        <label>自社の説明</label>
+	        <input type="radio" name="num_of_sit" value="3">
+	        <label>既に完成しているスライドで練習</label>
+        </p>
+        
+        <h3>時間</h3>
+        <p>
+	        <input type="radio" name="num_of_time" value="1">
+	        <label>30s</label>
+	        <input type="radio" name="num_of_time" value="2">
+	        <label>60s</label>
+	        <input type="radio" name="num_of_time" value="3">
+	        <label>90s</label>
+            <input type="radio" name="num_of_time" value="4">
+	        <label>5m</label>
+            <input type="radio" name="num_of_time" value="5">
+	        <label>10m</label>
+        </p>
+
+        <h3>なにを練習するか</h3>
+        <p>
+	        <input type="radio" name="num_of_what" value="1">
+	        <label>喋る</label>
+	        <input type="radio" name="num_of_what" value="2">
+	        <label>動き</label>
+	        <input type="radio" name="num_of_what" value="3">
+	        <label>スライドを用いて練習</label>
+        </p>
+
+        <!--
+        <h1>＜本番＞</h1>
+        -->
+
+        <p>以下のボタンを押すと音声をレコーディングすることができます</p>
+        <p>手順:<br>
+            ・Startを押す<br>
+            ・喋りおわったらStopを押す<br>
+            ・Sendを押して送信！<br>
+        </p>
+        <!--<button id="start">Start</button>
         <button id="stop">Stop</button>
         <button id="send">Send</button>
+        -->
+        <a href="" class="btn btn--orange btn--circle btn--circle-a btn--shadow">record！</a>
+        <link href="record.css" rel="stylesheet" type="text/css">
+        </center>
+
         <script>
             const startButton = document.getElementById('start');
             const stopButton = document.getElementById('stop');
@@ -58,17 +111,22 @@
                 }
             }
 
+            // 録音ファイルの送信
             function sendRecording(){
                 const formData = new FormData();
-                formData.append('audio', blob, 'recording.webm');
+                
+                if (blob){
+                    formData.append('audio', blob, 'recording.webm');
+                }
 
                 // サーバーにデータを送信するコードをここに記述する
-                fetch('upload_recording/', {
+                fetch('/record/upload_recording/', {
                     method: 'POST',
                     body: formData
                 })
                 .then(response => {
                     console.log(response)
+                    // window.location = response.url
                 })
                 .catch(error => {
                     // エラーハンドリング
